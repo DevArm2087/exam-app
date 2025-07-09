@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import Books from "./pages/Books";
 import Exam from "./pages/Exam";
 import Results from "./pages/Results";
-import AnswerSheet from "./pages/AnswerSheet";  // اضافه کردن صفحه پاسخبرگ
+import AnswerSheet from "./pages/AnswerSheet";
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -14,13 +14,17 @@ export default function App() {
     return saved ? JSON.parse(saved) : false;
   });
 
-  const [selectedLesson, setSelectedLesson] = useState(() => {
-    return localStorage.getItem("selectedLesson") || null;
-  });
+  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedBook, setSelectedBook] = useState(null);
 
-  const [selectedBook, setSelectedBook] = useState(() => {
-    return localStorage.getItem("selectedBook") || null;
-  });
+  // اینجا هنگام mount مقدارها رو از localStorage میخونه و ست میکنه
+  useEffect(() => {
+    const storedLesson = localStorage.getItem("selectedLesson");
+    const storedBook = localStorage.getItem("selectedBook");
+
+    if (storedLesson) setSelectedLesson(storedLesson);
+    if (storedBook) setSelectedBook(storedBook);
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -92,7 +96,7 @@ export default function App() {
           />
           <Route path="/exam-quick" element={<Exam />} />
           <Route path="/results" element={<Results />} />
-          <Route path="/answer-sheet" element={<AnswerSheet />} />  {/* این روت اضافه شده */}
+          <Route path="/answer-sheet" element={<AnswerSheet />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
